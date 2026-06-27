@@ -88,30 +88,41 @@ export class ProductListComponent implements OnInit {
   }
 
   onSearch(): void {
-    if (!this.searchKeyword.trim()) {
-      this.currentPage = 0;
-      this.loadProducts();
-      return;
-    }
-    this.isLoading = true;
-    this.isSearching = true;
-    this.isFiltering = false;
+
+  const keyword = this.searchKeyword.trim();
+
+  if (!keyword) {
     this.currentPage = 0;
-    this.productService.searchProducts(this.searchKeyword.trim(), this.currentPage, this.pageSize).subscribe({
-      next: (res) => {
-        this.products = res.data.content;
-        this.totalPages = res.data.totalPages;
-        this.totalElements = res.data.totalElements;
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Search failed';
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.loadProducts();
+    return;
   }
+
+  if (keyword.length < 2) {
+    return;
+  }
+
+  this.isLoading = true;
+  this.isSearching = true;
+  this.isFiltering = false;
+  this.currentPage = 0;
+
+  this.productService
+      .searchProducts(keyword, this.currentPage, this.pageSize)
+      .subscribe({
+        next: (res) => {
+          this.products = res.data.content;
+          this.totalPages = res.data.totalPages;
+          this.totalElements = res.data.totalElements;
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.message || 'Search failed';
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }
+      });
+}
 
   clearSearch(): void {
     this.searchKeyword = '';

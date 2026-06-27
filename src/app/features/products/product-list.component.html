@@ -34,7 +34,7 @@
   <div class="search-bar mt-3">
     <div class="input-group">
       <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="form-control" placeholder="Search by product name or code..." [(ngModel)]="searchKeyword" (keyup.enter)="onSearch()" />
+      <input type="text" class="form-control" placeholder="Search by product name or code..." [(ngModel)]="searchKeyword" (input)="onSearch()" />
       <button class="btn btn-primary" (click)="onSearch()">Search</button>
       <button class="btn btn-outline-secondary" *ngIf="isSearching" (click)="clearSearch()">
         <i class="bi bi-x"></i> Clear
